@@ -7,6 +7,7 @@ import view.beerview.web.model.BeerDto;
 import org.springframework.web.client.RestTemplate;
 
 
+import java.net.URI;
 import java.util.UUID;
 
 @Component
@@ -23,8 +24,20 @@ public class BreweryClient {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public BeerDto getBeerById(UUID uuid) {
-        return restTemplate.getForObject(apihost + BEER_PATH_V1 + uuid.toString(), BeerDto.class);
+    public BeerDto getBeerById(UUID id) {
+        return restTemplate.getForObject(apihost + BEER_PATH_V1 + id.toString(), BeerDto.class);
+    }
+
+    public URI saveNewBeer(BeerDto beerDto) {
+        return restTemplate.postForLocation(apihost + BEER_PATH_V1, beerDto);
+    }
+
+    public void updateBeer(UUID id, BeerDto beerDto){
+        restTemplate.put(apihost + BEER_PATH_V1 + id.toString(), beerDto);
+    }
+
+    public void deleteBeer(UUID id) {
+        restTemplate.delete(apihost + BEER_PATH_V1 + id.toString());
     }
 
     public void setApihost(String apihost){
